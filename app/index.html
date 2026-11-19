@@ -3,43 +3,44 @@
 <head>
 <meta charset="utf-8">
 <meta name="viewport" content="width=device-width, initial-scale=1">
-<title>Leonida Platinum — GTA VI Trophy Guide &amp; Tracker</title>
-<meta name="description" content="Offline guide and tracker for all 55 GTA VI PlayStation 5 trophies: official names, descriptions and grades, a roadmap to the platinum, missable flags, and a cited guide for every trophy.">
+<title>Leonida Platinum — GTA 6 Trophy Guide &amp; Tracker</title>
+<meta name="description" content="Offline guide and tracker for all 55 Grand Theft Auto VI trophies on PlayStation 5: official names, descriptions and grades, a roadmap to the platinum, missable flags, and a guide to each trophy with its sources.">
 <link rel="stylesheet" href="style.css">
 </head>
 <body>
 <header id="top">
-  <div class="wrap">
-    <p class="kicker">Grand Theft Auto VI &middot; PlayStation 5 &middot; Offline guide</p>
-    <h1>Leonida Platinum</h1>
-    <p class="sub">Every one of the 55 trophies — official name, description and grade, a guide that cites its sources, and a tracker that remembers your progress. No network needed: this page runs entirely from its own files.</p>
-    <div id="stats" class="stats" aria-label="Trophy totals"></div>
-    <div id="progress" class="progress" aria-label="Your progress">
-      <div class="progress-bar"><div id="progressFill" class="progress-fill"></div></div>
-      <p id="progressText" class="progress-text"></p>
+  <div class="masthead">
+    <div>
+      <p class="kicker">Grand Theft Auto VI &middot; PlayStation 5 &middot; 55 trophies</p>
+      <h1>Leonida Platinum</h1>
+      <p class="subtitle">The complete trophy guide and tracker for GTA 6 — offline, in your browser, no account, no network.</p>
     </div>
-    <div class="actions">
-      <button id="exportBtn" type="button">Export progress</button>
-      <button id="importBtn" type="button">Import progress</button>
-      <input id="importFile" type="file" accept="application/json,.json" hidden>
-      <button id="resetBtn" type="button" class="danger">Reset progress</button>
+    <div class="progress-card" id="progressCard">
+      <div class="big-count"><span id="earnedCount">0</span><span class="of">/ 55</span></div>
+      <div class="bar"><div class="bar-fill" id="progressFill"></div></div>
+      <p class="progress-line" id="progressLine">0% to the platinum</p>
+      <p class="grade-line" id="gradeLine">Platinum 0/1 &middot; Gold 0/2 &middot; Silver 0/6 &middot; Bronze 0/46</p>
     </div>
   </div>
+  <nav class="tabs" id="viewTabs">
+    <button type="button" data-view="checklist" class="active">Checklist</button>
+    <button type="button" data-view="roadmap">Roadmap to Platinum</button>
+    <button type="button" data-view="missables">Missable <span class="pill" id="missablePill">13</span></button>
+  </nav>
 </header>
 
-<nav id="tabs" class="tabs" aria-label="Sections">
-  <div class="wrap">
-    <button type="button" data-view="tracker" class="tab active">Tracker</button>
-    <button type="button" data-view="roadmap" class="tab">Roadmap to Platinum</button>
-    <button type="button" data-view="missables" class="tab">Missables</button>
-    <button type="button" data-view="about" class="tab">About &amp; Sources</button>
-  </div>
-</nav>
-
-<main class="wrap">
-  <section id="view-tracker" class="view">
-    <div id="toolbar" class="toolbar">
-      <input id="searchBox" type="search" placeholder="Search a trophy by name…" aria-label="Search trophies">
+<main>
+  <section id="view-checklist" class="view">
+    <div class="toolbar" id="toolbar">
+      <input type="search" id="searchBox" placeholder="Search a trophy, mission or keyword…" aria-label="Search trophies">
+      <div class="filters" id="kindFilters" role="group" aria-label="Filter by kind">
+        <button type="button" data-kind="all" class="active">All</button>
+        <button type="button" data-kind="story">Story</button>
+        <button type="button" data-kind="missable">Missable</button>
+        <button type="button" data-kind="collectibles">Collectibles</button>
+        <button type="button" data-kind="activities">Activities</button>
+        <button type="button" data-kind="online">Online</button>
+      </div>
       <select id="gradeFilter" aria-label="Filter by grade">
         <option value="all">All grades</option>
         <option value="platinum">Platinum</option>
@@ -47,46 +48,40 @@
         <option value="silver">Silver</option>
         <option value="bronze">Bronze</option>
       </select>
-      <div id="kindFilters" class="kind-filters" role="group" aria-label="Filter by kind">
-        <button type="button" data-kind="all" class="kind active">All</button>
-        <button type="button" data-kind="story" class="kind">Story</button>
-        <button type="button" data-kind="missable" class="kind">Missable</button>
-        <button type="button" data-kind="collectibles" class="kind">Collectibles</button>
-        <button type="button" data-kind="activities" class="kind">Activities</button>
-        <button type="button" data-kind="economy" class="kind">Heists &amp; Economy</button>
-        <button type="button" data-kind="online" class="kind">Online</button>
+      <label class="spoiler-toggle"><input type="checkbox" id="spoilerBox"> Hide story spoilers</label>
+      <div class="io-buttons">
+        <button type="button" id="exportBtn">Export</button>
+        <button type="button" id="importBtn">Import</button>
+        <input type="file" id="importFile" accept="application/json,.json" hidden>
+        <button type="button" id="resetBtn">Reset</button>
       </div>
-      <label class="check"><input id="spoilerToggle" type="checkbox"> Spoiler-safe: hide story trophies until earned</label>
-      <label class="check"><input id="hideEarnedToggle" type="checkbox"> Hide earned</label>
     </div>
-    <p id="listMeta" class="list-meta"></p>
-    <div id="trophyList" class="trophy-list"></div>
-    <p id="emptyState" class="empty" hidden>No trophies match these filters. Try clearing the search or picking another kind.</p>
+    <p class="list-meta" id="listMeta">55 trophies</p>
+    <div class="split">
+      <ul class="trophy-list" id="trophyList"></ul>
+      <aside class="detail" id="detailPane" aria-live="polite"></aside>
+    </div>
   </section>
 
   <section id="view-roadmap" class="view" hidden>
-    <h2>Roadmap to the Platinum</h2>
-    <p class="lede">Five stages, in order. Story first — the missable trophies all live in Stages 1 and 2 — then strands, activities, the big map sweep, and a final clean-up. Each stage lists the trophies it earns; tap one to open its guide in the tracker.</p>
-    <div id="roadmapList" class="roadmap-list"></div>
+    <h2>Roadmap to the platinum</h2>
+    <p class="section-intro">Five stages, in order, built from the official trophy descriptions. The story comes first because the game has no mission replay — keep a manual save before every story mission. Everything after the story can be done in free roam.</p>
+    <ol class="roadmap" id="roadmapList"></ol>
+    <p class="section-note">Sources: the official trophy list as Exophase and PSNProfiles published it (names, descriptions, grades, hidden flags and PSN counts). Where a stage leans on a fact beyond a description, the trophy guides below name the guide it came from.</p>
   </section>
 
   <section id="view-missables" class="view" hidden>
-    <h2>Missable trophies — do these on time</h2>
-    <p class="lede">A trophy is flagged missable when its official description ties it to one named mission, one character's final mission, a moment with your partner, or a choice. The game had not launched when this guide was written, so treat every flag as our reading of the official description — and replay a named mission promptly if its trophy does not pop.</p>
-    <div id="missableList" class="missable-list"></div>
-  </section>
-
-  <section id="view-about" class="view" hidden>
-    <h2>About &amp; sources</h2>
-    <div id="aboutBody" class="about"></div>
+    <h2>Missable trophies — 13 to protect</h2>
+    <p class="section-intro">A trophy is flagged missable here when its official description ties it to a story chapter or mission in a game with no mission replay, or when published guides flag its moment as one-time. The defence is the same for all thirteen: manual saves before story missions, and the Chapter 1 meditation before leaving Chapter 1.</p>
+    <div class="missable-grid" id="missableList"></div>
   </section>
 </main>
 
-<footer class="wrap">
-  <p>Leonida Platinum is an unofficial fan guide. Grand Theft Auto and GTA are trademarks of Rockstar Games; this guide uses no Rockstar logo, artwork or game screenshots. Trophy names and descriptions are shown as PlayStation publishes them; every guide is written in our own words. Progress is saved in your browser only (localStorage) and never leaves your device unless you export it.</p>
-  <p>Built for the make.fun competition <a href="https://make.fun/c/gta6-trophy-guide-01">gta6-trophy-guide-01</a>.</p>
+<footer>
+  <p>Leonida Platinum — an unofficial, open-source guide. No Rockstar Games logo, artwork or game screenshots are used. Trophy names, descriptions and grades are PlayStation's own, as listed by Exophase and PSNProfiles; every guide is written in this entry's own words and names its sources. Works fully offline: this page fetches nothing but its own files. Progress is saved in this browser only (localStorage) and can be exported and imported.</p>
+  <p class="foot-links">Sources: <a href="https://www.exophase.com/game/grand-theft-auto-vi-psn/trophies/">Exophase — GTA VI trophy list</a> &middot; <a href="https://psnprofiles.com/trophies/43531-grand-theft-auto-vi">PSNProfiles — GTA VI trophies</a> &middot; <a href="https://www.u7buy.com/blog/gta-6-trophies/">U7BUY — GTA 6 trophies guide</a></p>
 </footer>
 
-<script src="app.js"></script>
+<script type="module" src="app.js"></script>
 </body>
 </html>

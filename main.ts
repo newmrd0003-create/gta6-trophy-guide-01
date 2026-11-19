@@ -1,15 +1,9 @@
-// Leonida Platinum — a GTA VI trophy guide & tracker for make.fun's
-// gta6-trophy-guide-01 (Node 22, standard library only).
-//
-// What this program hands in: the static guide in app/ (index.html, its
-// script, styles and data/trophies.json — the 55 official trophies with a
-// cited guide each) and the screenshots/ renders of it. It copies both into
-// the output directory and writes dossier.json there with the vendored
-// make.fun library, which is the scorer's own copy and must stay unchanged.
-//
-// Run it outside the grader with MAKEFUN_OUTPUT_DIR standing in for /output:
+// Leonida Platinum — the entry program (Node 22, standard library only).
+// It hands the guide in: copy this repository's app/ and screenshots/ into
+// the output directory and write /output/dossier.json with the kit's vendored
+// buildDossier, exactly as the scorer rebuilds it. Outside the grader,
+// MAKEFUN_OUTPUT_DIR stands in for /output:
 //   mkdir -p out && MAKEFUN_OUTPUT_DIR=out node main.ts
-// Serve the guide locally while you work on it with `node serve.ts`.
 
 import { cpSync, existsSync, mkdirSync, writeFileSync } from 'node:fs';
 import { join } from 'node:path';
@@ -19,21 +13,17 @@ import { buildDossier } from './vendor/makefun-frontend.ts';
 const repoRoot = fileURLToPath(new URL('.', import.meta.url));
 const outDir = process.env.MAKEFUN_OUTPUT_DIR ?? '/output';
 
-function copyTree(from, to) {
-  mkdirSync(to, { recursive: true });
-  cpSync(from, to, { recursive: true });
-}
-
 mkdirSync(outDir, { recursive: true });
-copyTree(join(repoRoot, 'app'), join(outDir, 'app'));
+cpSync(join(repoRoot, 'app'), join(outDir, 'app'), { recursive: true });
+mkdirSync(join(outDir, 'screenshots'), { recursive: true });
 if (existsSync(join(repoRoot, 'screenshots'))) {
-  copyTree(join(repoRoot, 'screenshots'), join(outDir, 'screenshots'));
+  cpSync(join(repoRoot, 'screenshots'), join(outDir, 'screenshots'), { recursive: true });
 }
 
-// The scorer's own caps: 4 screenshots at most, each at most 256 KiB;
-// app/ at most 993 files and directories and 48 MiB; the dossier's text at
-// most 163,840 bytes. buildDossier refuses anything past those limits, so
-// a dossier it writes is one the scorer accepts.
+// Caps from the competition's gate: at most 4 screenshots of 256 KiB each,
+// app/ at most 993 files and directories and 48 MiB, dossier text at most
+// 160 KiB. Anything past those limits fails here the same way it would
+// fail the sealed scorer, so a bad build is loud instead of silently wrong.
 writeFileSync(
   join(outDir, 'dossier.json'),
   buildDossier(outDir, {
@@ -43,4 +33,3 @@ writeFileSync(
     app_max_bytes: 50331648,
   }),
 );
-console.log(`Leonida Platinum handed in to ${outDir}`);

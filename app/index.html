@@ -1,92 +1,109 @@
-<!doctype html>
+<!DOCTYPE html>
 <html lang="en">
 <head>
 <meta charset="utf-8">
 <meta name="viewport" content="width=device-width, initial-scale=1">
-<title>Leonida Trophy Guide — GTA VI (PS5)</title>
-<link rel="stylesheet" href="style.css">
+<title>Leonida Platinum — GTA VI Trophy Guide &amp; Tracker</title>
+<meta name="description" content="Offline guide and tracker for all 55 GTA VI PlayStation 5 trophies: checklist, roadmap to the platinum, missables flagged, and a cited guide to each trophy.">
+<link rel="icon" href="data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 32 32'%3E%3Crect width='32' height='32' rx='7' fill='%23ff5c38'/%3E%3Ctext x='16' y='23' font-size='18' font-family='Georgia,serif' font-weight='bold' text-anchor='middle' fill='%23fff'%3EL%3C/text%3E%3C/svg%3E">
+<link rel="stylesheet" href="./style.css">
 </head>
 <body>
-<header class="masthead">
-  <div>
-    <p class="kicker">Grand Theft Auto VI &middot; PlayStation 5 &middot; 55 trophies &middot; works offline</p>
-    <h1>Leonida Trophy Guide</h1>
-    <p class="lede">Every GTA VI trophy with its official name, description and grade, a guide in our own words with its sources, a roadmap to the platinum, and a tracker that remembers what you earned. Difficulty 4/10, about 200 hours to platinum (PowerPyx). One playthrough, no mission replay, free-roam after the story.</p>
+<header class="top">
+  <div class="top-inner">
+    <div class="brand">
+      <p class="kicker">Grand Theft Auto VI &middot; PlayStation 5</p>
+      <h1>Leonida Platinum</h1>
+      <p class="sub">The offline trophy guide &amp; tracker &mdash; all 55 official trophies, a roadmap to the platinum, and a guide to each that cites its sources.</p>
+    </div>
+    <div class="progress" id="progressBox" aria-live="polite">
+      <div class="big"><span id="earnedCount">0</span><span class="of">/ 55</span></div>
+      <div class="bar"><div class="fill" id="progressFill" style="width:0%"></div></div>
+      <p class="counts" id="gradeCounts"></p>
+      <p class="next" id="nextUp"></p>
+    </div>
   </div>
-  <div class="progress-card" id="progress-card">
-    <p class="progress-line"><strong id="progress-text">0 of 55 earned</strong> &middot; <span id="progress-pct">0%</span></p>
-    <div class="bar" role="progressbar" aria-label="Trophies earned"><div class="bar-fill" id="bar-fill"></div></div>
-    <p class="grades" id="grade-counts"></p>
-    <p class="platinum-note" id="platinum-note"></p>
-  </div>
+  <nav class="tabs" role="tablist" aria-label="Guide sections">
+    <button class="tab active" data-view="checklist" role="tab" aria-selected="true">Checklist</button>
+    <button class="tab" data-view="roadmap" role="tab" aria-selected="false">Roadmap to Platinum</button>
+    <button class="tab" data-view="missables" role="tab" aria-selected="false">Missables</button>
+    <button class="tab" data-view="about" role="tab" aria-selected="false">About &amp; Sources</button>
+  </nav>
 </header>
 
-<nav class="tabs" aria-label="Views">
-  <a class="tab active" href="#checklist" id="tab-checklist">Checklist</a>
-  <a class="tab" href="#roadmap" id="tab-roadmap">Roadmap to Platinum</a>
-  <a class="tab" href="#sources" id="tab-sources">Sources</a>
-</nav>
+<main>
+  <section id="view-checklist" class="view active" aria-label="Trophy checklist">
+    <div class="toolbar">
+      <input id="search" type="search" placeholder="Search a trophy by name or description&hellip;" aria-label="Search trophies">
+      <div class="chips" id="kindChips" role="group" aria-label="Filter by kind">
+        <button class="chip active" data-kind="all">All</button>
+        <button class="chip" data-kind="story">Story</button>
+        <button class="chip" data-kind="side">Side</button>
+        <button class="chip" data-kind="activity">Activities</button>
+        <button class="chip" data-kind="collectible">Collectibles</button>
+        <button class="chip" data-kind="crime">Crime</button>
+        <button class="chip" data-kind="exploration">Exploration</button>
+        <button class="chip" data-kind="misc">Other</button>
+        <button class="chip" data-kind="missable">Missable</button>
+      </div>
+      <div class="controls">
+        <label class="ctl">Grade
+          <select id="gradeFilter">
+            <option value="all">All grades</option>
+            <option value="platinum">Platinum</option>
+            <option value="gold">Gold</option>
+            <option value="silver">Silver</option>
+            <option value="bronze">Bronze</option>
+          </select>
+        </label>
+        <label class="ctl check"><input type="checkbox" id="hideEarned"> Hide earned</label>
+        <label class="ctl check"><input type="checkbox" id="spoilerToggle"> Spoiler-safe mode</label>
+        <button id="exportBtn" type="button">Export progress</button>
+        <button id="importBtn" type="button">Import progress</button>
+        <input id="importFile" type="file" accept="application/json,.json" hidden>
+        <button id="resetBtn" type="button" class="danger">Reset</button>
+      </div>
+      <p class="hint" id="spoilerHint" hidden>Spoiler-safe mode is on: story trophy names and descriptions stay hidden until you earn them.</p>
+    </div>
+    <div class="layout">
+      <ul class="list" id="trophyList"></ul>
+      <aside class="detail" id="detailPane" aria-live="polite">
+        <p class="detail-empty">Select a trophy to read its guide, its sources and when it can be missed.</p>
+      </aside>
+    </div>
+  </section>
 
-<section class="missable-banner" id="missable-banner">
-  <strong>Only one trophy can truly be missed:</strong> <em>Positive Mental Attitude</em> — meditate at Jason&rsquo;s house before Chapter 1 ends (PowerPyx). Story trophies are flagged &ldquo;story-locked&rdquo;: there is no mission replay, so each must be earned in your single playthrough.
-</section>
+  <section id="view-roadmap" class="view" aria-label="Roadmap to the platinum">
+    <p class="intro">Six stages, in the order to play them. Every stage lists the trophies it earns and the one piece of advice that matters most. Built from the official descriptions alone.</p>
+    <ol class="stages" id="roadmapList"></ol>
+  </section>
 
-<section class="toolbar" aria-label="Tracker controls">
-  <label class="search">Search <input id="search" type="search" placeholder="Trophy, mission or keyword&hellip;" autocomplete="off"></label>
-  <label>Kind
-    <select id="kind">
-      <option value="all">All kinds</option>
-      <option value="story">Story</option>
-      <option value="missable">Missable</option>
-      <option value="collectible">Collectibles</option>
-      <option value="activity">Activities</option>
-      <option value="online">Online</option>
-    </select>
-  </label>
-  <label>Grade
-    <select id="grade">
-      <option value="all">All grades</option>
-      <option value="platinum">Platinum</option>
-      <option value="gold">Gold</option>
-      <option value="silver">Silver</option>
-      <option value="bronze">Bronze</option>
-    </select>
-  </label>
-  <label class="check"><input id="spoiler" type="checkbox"> Hide story spoilers</label>
-  <label class="check"><input id="earned-only" type="checkbox"> Earned only</label>
-  <button id="export" type="button">Export progress</button>
-  <label class="import">Import progress <input id="import" type="file" accept="application/json,.json"></label>
-  <button id="reset" type="button">Reset</button>
-</section>
+  <section id="view-missables" class="view" aria-label="Missable trophies">
+    <p class="intro">Nine trophies are flagged missable. The flag means the official description describes a single moment, choice or unbroken sequence that may not come back — the game is a day old and replay rules are unconfirmed, so treat each one as missable until proven otherwise. Do them deliberately, in stage 5 of the roadmap, and save before the attempt where the game allows it.</p>
+    <ul class="list missable-list" id="missableList"></ul>
+  </section>
 
-<section id="guide-detail" class="guide-detail" hidden></section>
-
-<main id="checklist">
-  <p class="count-line" id="count-line"></p>
-  <div id="list" class="list"></div>
-  <p class="empty" id="empty" hidden>No trophies match these filters. Try clearing the search or choosing another kind.</p>
+  <section id="view-about" class="view" aria-label="About and sources">
+    <div class="about">
+      <h2>How this guide is built</h2>
+      <p>Every trophy name, description and grade is the official PlayStation 5 list as published before this guide was written: names, descriptions and grades from the official list on Exophase, PSN progress targets from PSNProfiles. The two agreed on every name, description and grade: 55 trophies — 1 platinum, 2 gold, 6 silver, 46 bronze.</p>
+      <p>Every guide on this page is written in our own words from the official description alone. The game is a day old, so no guide step here has been checked in the game yet. Where a place or a step is not pinned down by the official description, the guide says so instead of inventing it.</p>
+      <h2>Sources</h2>
+      <ul>
+        <li>Exophase — the official trophy list (names, descriptions, grades): exophase.com/game/grand-theft-auto-vi-psn/trophies</li>
+        <li>PSNProfiles — PSN progress targets where a trophy has one: psnprofiles.com/trophies/43531-grand-theft-auto-vi</li>
+      </ul>
+      <h2>Offline &amp; yours</h2>
+      <p>This guide is static files only. It makes no network request, your checklist is saved in this browser (localStorage), and you can export it to a file and import it back. No Rockstar logo or official artwork is used anywhere — the look is our own.</p>
+      <p class="fine">Grand Theft Auto and GTA are trademarks of Rockstar Games. This is an unofficial fan guide, not affiliated with Rockstar Games or PlayStation.</p>
+    </div>
+  </section>
 </main>
 
-<section id="roadmap" class="roadmap">
-  <h2>Roadmap to the platinum</h2>
-  <p class="roadmap-intro">Five stages, about 200 hours in all (PowerPyx). The 100% checklist is closer to 60% true completion — 200 of 277 vehicles, 100 of 255 animals, 50 of 66 weapons, 70 of 80 challenges — so the grind is kinder than it looks.</p>
-  <ol id="roadmap-steps" class="roadmap-steps"></ol>
-  <h3>Missable trophies</h3>
-  <p>PowerPyx lists exactly one trophy as potentially missable: <strong>Positive Mental Attitude</strong> (meditate at Jason&rsquo;s house in Chapter 1). The 12 story trophies are flagged <strong>story-locked</strong> in this guide because the game has no mission replay: each must be earned in your single playthrough. Everything else can be cleaned up in free-roam after the story.</p>
-  <ul id="missable-list" class="missable-list"></ul>
-</section>
-
-<footer id="sources" class="sources">
-  <h2>Sources</h2>
-  <p>Trophy names, descriptions and grades are the official PlayStation list as published on Exophase and PSNProfiles (the two agree on all 55). Every guide on this page is written for this entry in its own words and names its sources beside it — cited, never copied. Roadmap figures (200 hours, 5 chapters, 70 of 80 challenges, 200 of 277 vehicles, 100 of 255 animals, the Chapter 1 meditation warning, no mission replay) come from PowerPyx&rsquo;s GTA 6 Trophy Guide &amp; Roadmap.</p>
-  <ul>
-    <li><a href="https://www.powerpyx.com/gta-6-grand-theft-auto-vi-trophy-guide-roadmap/">PowerPyx — GTA 6 Trophy Guide &amp; Roadmap</a></li>
-    <li><a href="https://www.exophase.com/game/grand-theft-auto-vi-psn/trophies/">Exophase — GTA VI trophy list</a></li>
-    <li><a href="https://psnprofiles.com/trophies/43531-grand-theft-auto-vi">PSNProfiles — GTA VI trophies</a></li>
-  </ul>
-  <p class="fineprint">An unofficial fan guide. Not affiliated with Rockstar Games or PlayStation. No Rockstar logo, artwork or game screenshots are used. This page loads nothing over the network and works with the network off; progress is stored only in your browser (localStorage).</p>
+<footer>
+  <p>Leonida Platinum &middot; GTA VI trophy guide &amp; tracker &middot; works offline &middot; progress stays in your browser.</p>
 </footer>
 
-<script type="module" src="app.js"></script>
+<script type="module" src="./app.js"></script>
 </body>
 </html>
